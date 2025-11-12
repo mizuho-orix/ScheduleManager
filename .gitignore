@@ -1,0 +1,31 @@
+# === Build artifacts ===
+/build/
+/target/
+/out/
+/bin/
+*.class
+*.backup
+*.bak
+*~
+*.tmp
+*.log
+
+# === IDE / Environment ===
+/.classpath
+/.project
+/.settings/
+/.idea/
+/.vscode/
+/.metadata/
+
+# === OS / System files ===
+.DS_Store
+Thumbs.db
+
+# === Config / Secrets ===
+.env
+*.properties
+
+# === db ===
+*.mv.db
+*.trace.db
