@@ -1,0 +1,181 @@
+header {
+    background-color: #1aaedb;
+    border-bottom: #ead963 6px solid;
+}
+
+body {
+  font-family: sans-serif;
+  background-color: #f2f2f2;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.contents {
+  background-color: #d4f7fc;
+  width: 1200px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: auto;
+  padding: 0 1.5rem;
+}
+
+.logo {
+  width: 100px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.menu {
+  display: flex;
+}
+
+.command {
+  width: 400px;
+  min-width: 400px;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  align-content: space-around;
+  border-right: solid #000;
+}
+
+
+.command li {
+  font-size: 1.5rem;
+  height: 3rem;
+  line-height: 3rem;
+  text-align: center;
+  background-color: #ffffff;
+  border: 2px solid #007bff;
+  border-radius: 0.5rem;
+  margin: 1.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  vertical-align: middle;
+  border-style: solid;
+}
+
+.command li:hover {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+.today-task {
+  background-color: #fff;
+  height: 300px;
+  width: 700px;
+  min-width: 600px;
+  margin: 1rem 2rem 1rem 2rem;
+  padding: 0.5rem 1.5rem;
+  border-style: solid;
+  border-width: thin;
+  border-radius: 0.5rem;
+}
+
+.login-status {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  font-size:14px;
+  list-style: none;
+}
+
+h2 {
+  margin-top: 0.5rem;
+}
+
+/* 予定表示用ボックス */
+.add-box {
+  height: 500px;
+  font-size: 3rem;}
+
+/* 予定入力時の日付選択ボックス */
+form input[type="date"] {
+  width: 100px;
+  height: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* 予定入力時の予定内容ボックス */
+form input[type="text"] {
+  width: 300px;
+  height: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* 予定入力時の備考ボックス */
+form textarea[name="add-Comment"] {
+  width: 300px;
+  height: 100px;
+  margin-top: 0.5rem;
+}
+
+
+/* カレンダーの日付選択ドロップボックス */
+.controls {
+  text-align: center;
+}
+
+table {
+  margin: 20px auto;
+  border-collapse: collapse;
+  width: 1000px;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 14.28%;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+td {
+	font-size: 14px;
+	background-color: #fff;
+  height: 120px;
+	text-align: right;
+	vertical-align: top;
+}
+
+.today {
+  background-color: #ffeb3b;
+}
+
+tbody ul  {
+  text-align: left;
+  font-size: 0.8rem;
+  padding-left: 0;
+  list-style-position: inside;
+  ::marker {
+    font-size: 0.5rem;
+  }
+}
+
+tbody :hover {
+  background-color: #ccc;
+}
+
+footer {
+    background-color: #1aaedb;
+}
+
+footer .container {
+    min-height: 50px;
+    padding-top:10px;
+    padding-bottom:10px;
+    color: #fff;
+    font-size: 12px;
+    text-align: right;
+}
+
+

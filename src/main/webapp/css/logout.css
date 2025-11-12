@@ -1,0 +1,27 @@
+@charset "UTF-8";
+
+/* 全体の基本スタイル */
+body {
+    font-family: 'Helvetica Neue', sans-serif;
+    background-color: #d4f7fc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* ログアウト全体のコンテナ */
+.logout-container {
+    background-color: white;
+    padding: 40px 50px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 320px;
+    text-align: center;
+}
+
+/* 見出しスタイル */
+.logout-container h1 {
+    margin-bottom: 30px;
+    color: #333;
+}
