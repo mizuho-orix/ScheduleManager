@@ -1,3 +1,5 @@
+'use strict';
+
 ////////////////////////////////////////////////////////
 // カレンダーを表示
 ////////////////////////////////////////////////////////
@@ -29,10 +31,11 @@ for (let y = 2000; y <= 2030; y++) {
 
         // option(選択肢)の状態をtrueに
         option.selected = true;
-
-        // htmlのID「year」に変数「option」の要素を追加する
-        yearSelect.appendChild(option);
     }
+
+    // htmlのID「year」に変数「option」の要素を追加する
+    yearSelect.appendChild(option);
+    
 }
 
 // 0～11まで繰り返して月の選択肢を表示するドロップダウンメニューを作成
@@ -51,10 +54,10 @@ for (let m = 0; m < 12; m++) {
     if (m === today.getMonth()) {
         // option(選択肢)の状態をtrueに
         option.selected = true;
-
-        //htmlのID「month」に変数「option」の要素を追加する
-        monthSelect.appendChild(option);
     }
+
+    //htmlのID「month」に変数「option」の要素を追加する
+    monthSelect.appendChild(option);
 }
 
 // カレンダーの作成
@@ -187,70 +190,119 @@ renderCalendar(today.getFullYear(), today.getMonth());
 // 新規予定作成ボタンをクリック時
 ////////////////////////////////////////////////////////////////////
 
-// 画面読み込み時にイベントを作成
-document.addEventListener("DOMContentLoaded", () => {
-    // 予定作成ボタンのID「add-task」の要素を取得
-    const addTaskBtn = document.getElementById("add-task");
+$(document).ready(function() {
+    $('#add-task').on('click', function() {
+    // すでに .addBox が存在するかチェック
+    if ($('.addBox').length === 0) {
+        // class="today-task"の要素を取得
+        const taskBox = document.querySelector(".today-task");
 
-    // class="today-task"の要素を取得
-    const taskBox = document.querySelector(".today-task");
-
-    // 新規予定入力ボタンを押した時のイベントを作成
-    addTaskBtn.addEventListener("click", () => {
         // today-taskボックスの中身をクリア
-        taskBox.innerHTML = "";
+        taskBox.innerHTML = "";    
 
-        // ボックス内に「新規予定入力」表示
-        const title = document.createElement("h2");
-        title.textContent = "新規予定入力";
-        taskBox.appendChild(title);
-
-        // 日付入力フォームのラベルと入力ボックス作成
-        const dateLabel = document.createElement("label");
-        dateLabel.textContent = "日付を選択：";
-        const dateInput = document.createElement("input");
-        dateInput.type = "date"; // type="date"でブラウザ標準のカレンダーUIが使える
-
-        // 予定入力フォームのラベルとテキストボックス作成
-        const taskLabel = document.createElement("label");
-        taskLabel.textContent = "予定内容";
-        const taskInput = document.createElement("input");
-        taskInput.type = "text";
-        taskInput.placeholder ="予定を入力";
-
-        // 追加ボタン作成
-        const addButton = document.createElement("button");
-        addButton.textContent = "追加";
-
-        // 要素をまとめて追加
-        taskBox.appendChild(dateLabel);
-        taskBox.appendChild(dateInput);
-        taskBox.appendChild(document.createElement("br")); //改行
-        taskBox.appendChild(taskLabel);
-        taskBox.appendChild(taskInput);
-        taskBox.appendChild(document.createElement("br")); //改行
-        taskBox.appendChild(addButton);
-
-        // ボタンのクリック処理（ここで予定を保存するなどの処理を追加可能）
-        addButton.addEventListener("click", () => {
-            // 日付入力フォームの値を取得
-            const selectedDate = dateInput.value;
-
-            // 予定内容入力フォームの値を取得
-            const taskText = taskInput.value.trim();
-
-            // 日付と予定内容が入力されていれば登録
-            if (selectedDate && taskText) {
-                const confirmMsg = document.createElement("p");
-                confirmMsg.textContent = `${selectedDate} に予定を追加しました：${taskText}`;
-                taskBox.appendChild(confirmMsg);
-
-                // 入力欄をクリア
-                taskInput.value = "";
-            }
-
-        });
+        const addBoxHtml = `
+        <div class="addBox">
+            <p>新規予定入力</p>
+            <form action="#" method="post">
+            <label for="add-Date">日付を選択：</label>
+            <input type="date" name="add-Date"><br>
+            <label for="add-Schedule">予定内容　：</label>
+            <input type="text" name="add-Schedule" placeholder="予定を入力"><br>
+            <div class="comment-Area">
+                <div class="comment">備考　　　：</div>
+                <div class="comment-Box"><textarea name="add-Comment"></textarea></div>
+            </div>
+            <button type="submit">予定を追加</button>
+            </form>
+        </div>
+        `;
+        $('.today-task').append(addBoxHtml);
+    }
     });
 });
+
+// ↑↑ 新規予定作成ボタンクリック時 ここまで ↑↑
+////////////////////////////////////////////////////////////////////
+
+
+
+
+// ↓jQueryで実装したのでボツになった
+
+// 画面読み込み時にイベントを作成
+// document.addEventListener("DOMContentLoaded", () => {
+//     // 予定作成ボタンのID「add-task」の要素を取得
+//     const addTaskBtn = document.getElementById("add-task");
+
+//     // class="today-task"の要素を取得
+//     const taskBox = document.querySelector(".today-task");
+
+//     // 新規予定入力ボタンを押した時のイベントを作成
+//     addTaskBtn.addEventListener("click", () => {
+//         // today-taskボックスの中身をクリア
+//         taskBox.innerHTML = "";
+
+//         // ボックス内に「新規予定入力」表示
+//         const title = document.createElement("h2");
+//         title.textContent = "新規予定入力";
+//         taskBox.appendChild(title);
+
+//         // titleの下に入力内容をまとめる用のdivを作成
+//         const addBox = document.createElement("div");
+//         taskBox.appendChild(addBox);
+//         addBox.classList.add("addBox");
+
+//         // divの中に作成するulを作成
+//         const addBoxUl = document.createElement("ul");
+//         addBox.appendChild(addBoxUl);
+
+//         // 10/31 ここで終了
+
+//         // 日付入力フォームのラベルと入力ボックス作成
+//         const dateLabel = document.createElement("label");
+//         dateLabel.textContent = "日付を選択：";
+//         const dateInput = document.createElement("input");
+//         dateInput.type = "date"; // type="date"でブラウザ標準のカレンダーUIが使える
+
+//         // 予定入力フォームのラベルとテキストボックス作成
+//         const taskLabel = document.createElement("label");
+//         taskLabel.textContent = "予定内容：";
+//         const taskInput = document.createElement("input");
+//         taskInput.type = "text";
+//         taskInput.placeholder ="予定を入力";
+
+//         // 追加ボタン作成
+//         const addButton = document.createElement("button");
+//         addButton.textContent = "追加";
+
+//         // 要素をまとめてdiv内に追加
+//         addBox.appendChild(dateLabel);
+//         addBox.appendChild(dateInput);
+//         addBox.appendChild(document.createElement("br")); //改行
+//         addBox.appendChild(taskLabel);
+//         addBox.appendChild(taskInput);
+//         addBox.appendChild(document.createElement("br")); //改行
+//         addBox.appendChild(addButton);
+
+//         // ボタンのクリック処理（ここで予定を保存するなどの処理を追加可能）
+//         addButton.addEventListener("click", () => {
+//             // 日付入力フォームの値を取得
+//             const selectedDate = dateInput.value;
+
+//             // 予定内容入力フォームの値を取得
+//             const taskText = taskInput.value.trim();
+
+//             // 日付と予定内容が入力されていれば登録
+//             if (selectedDate && taskText) {
+//                 const confirmMsg = document.createElement("p");
+//                 confirmMsg.textContent = `${selectedDate} に予定を追加しました：${taskText}`;
+//                 taskBox.appendChild(confirmMsg);
+
+//                 // 入力欄をクリア
+//                 taskInput.value = "";
+//             }
+//         });
+//     });
+// });
 
 

@@ -26,7 +26,7 @@
 			<div class="logo">TaskManager</div>
 			<nav>
 				<ul class="login-status">
-					<li><%= loginUser.getName_Sei() + loginUser.getName_Mei() %>さん、ログイン中</li>
+					<li><%= loginUser.getName_Sei() + " " + loginUser.getName_Mei() %>さん、ログイン中</li>
 					<li><a href="Logout">ログアウト</a></li>
 				</ul>
 			</nav>
@@ -48,21 +48,21 @@
 
 
 
-			<div class="controls">
-			  <label for="year">年:</label>
-			  <select id="year"></select>
-			  <label for="month">月:</label>
-			  <select id="month"></select>
-			</div>
+	<div class="controls">
+		<label for="year">年:</label>
+		<select id="year"></select>
+		<label for="month">月:</label>
+		<select id="month"></select>
+	</div>
 
-			<table id="calendar">
-			  <thead>
-			    <tr>
-			      <th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th>
-			    </tr>
-			  </thead>
-			  <tbody></tbody>
-			</table>
+	<table id="calendar">
+	  <thead>
+	    <tr>
+	      <th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th>
+	    </tr>
+	  </thead>
+	  <tbody></tbody>
+	</table>
 
 
 
@@ -81,5 +81,6 @@
 </body>
 <footer>
 </footer>
- <script src="<%= request.getContextPath() %>/js/calendar.js" type="text/javascript"></script>
+	<script src="<%= request.getContextPath() %>/js/jquery-3.4.1.min.js" type="text/javascript"></script>
+	<script src="<%= request.getContextPath() %>/js/calendar.js" type="text/javascript"></script>	
 </html>

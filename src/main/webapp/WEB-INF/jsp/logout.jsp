@@ -6,7 +6,7 @@
 		<meta charset="UTF-8">
 		<title>TaskManager</title>
 		<!-- cssを指定 -->
-		<link rel="stylesheet" href="<%= request.getContextPath() %>/css/index.css"> 
+		<link rel="stylesheet" href="<%= request.getContextPath() %>/css/logout.css"> 
 	</head>
 
 	<body>

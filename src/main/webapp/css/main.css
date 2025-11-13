@@ -45,7 +45,6 @@ h1 {
   border-right: solid #000;
 }
 
-
 .command li {
   font-size: 1.5rem;
   height: 3rem;
@@ -72,8 +71,8 @@ h1 {
   height: 300px;
   width: 700px;
   min-width: 600px;
-  margin: 1rem 2rem 1rem 2rem;
-  padding: 0.5rem 1.5rem;
+  margin: 0 2rem 1rem 2rem;
+  padding: 0 1.5rem 0.5rem;
   border-style: solid;
   border-width: thin;
   border-radius: 0.5rem;
@@ -92,31 +91,48 @@ h2 {
 }
 
 /* 予定表示用ボックス */
-.add-box {
-  height: 500px;
-  font-size: 3rem;}
+.addBox {
+  height: 85%;
+  margin-bottom: 1.5rem;
+}
 
-/* 予定入力時の日付選択ボックス */
+/* 新規予定入力時のタイトル */
+.addBox p {
+  font-size: 1.2rem;
+  font-weight: bold;
+  height: 1.5rem;
+}
+
+/* 新規予定入力時の日付選択ボックス */
 form input[type="date"] {
   width: 100px;
   height: 1.5rem;
   margin-bottom: 0.5rem;
 }
 
-/* 予定入力時の予定内容ボックス */
+/* 新規予定入力時の予定内容ボックス */
 form input[type="text"] {
   width: 300px;
   height: 1.5rem;
   margin-bottom: 0.5rem;
 }
 
-/* 予定入力時の備考ボックス */
+/* 新規予定入力時の備考エリア */
+.comment-Area {
+  display: flex;
+}
+
+/* 新規予定入力時の備考入力ボックス */
 form textarea[name="add-Comment"] {
   width: 300px;
   height: 100px;
-  margin-top: 0.5rem;
+  margin: 0.3rem 0 0.5rem 0.3rem;
 }
 
+/* 新規予定入力時の予定追加ボタン */
+.addBox button {
+  margin-left: 325px;
+}
 
 /* カレンダーの日付選択ドロップボックス */
 .controls {
