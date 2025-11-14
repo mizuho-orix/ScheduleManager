@@ -73,7 +73,8 @@ public class Main extends HttpServlet {
 			Mutter mutter = new Mutter(loginUser.getName_Sei(), text);
 			PostMutterLogic postMutterLogic = new PostMutterLogic();
 			
-			//
+			// 引数としてつぶやき内容を渡し、
+			// データベース接続→登録するexecuteメソッドを呼び出す
 			postMutterLogic.execute(mutter);
 			
 		} else {

@@ -81,6 +81,15 @@
 </body>
 <footer>
 </footer>
+
+	<!--	jQuery読み込み-->
 	<script src="<%= request.getContextPath() %>/js/jquery-3.4.1.min.js" type="text/javascript"></script>
+
+	<!--	jsp内で読み取ったセッションスコープの内容を外部jsファイルで使用する為に
+			jspファイル内でスコープの内容を変数に格納 -->
+	<script>
+		const userId = "<%= loginUser.getId() %>";
+	</script>
+
 	<script src="<%= request.getContextPath() %>/js/calendar.js" type="text/javascript"></script>	
 </html>

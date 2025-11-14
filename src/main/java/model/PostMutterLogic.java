@@ -10,5 +10,4 @@ public class PostMutterLogic {
 		//生成したクラスのcreateメソッドを実行
 		dao.create(mutter);
 	}
-	
 }

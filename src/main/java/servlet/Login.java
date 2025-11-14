@@ -1,6 +1,8 @@
 package servlet;
 
 import java.io.IOException;
+import java.time.YearMonth;
+import java.util.List;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -10,8 +12,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import model.GetScheduleLogic;
 import model.LoginInfo;
 import model.LoginLogic;
+import model.Schedule;
 import model.User;
 
 /**
@@ -40,12 +44,12 @@ public class Login extends HttpServlet {
 		LoginInfo loginInfo = new LoginInfo(name, pass);
 		
 		// ログインの照合処理を担当するLoginLogicクラスを生成
-		LoginLogic bo = new LoginLogic();
+		LoginLogic loginBo = new LoginLogic();
 		
 		// ログイン情報を渡してデータベースから
 		// ユーザーIDとパスワードが合致するユーザーがいるかを照合する
 		// executeメソッドを呼び出す
-		User user = bo.execute(loginInfo);
+		User user = loginBo.execute(loginInfo);		
 						
 		//ログイン成功時の処理
 		if (user != null) {
@@ -53,7 +57,19 @@ public class Login extends HttpServlet {
 			//（セッションスコープを作成し、"loginUser"と名付け、クラス「user」を格納）
 			HttpSession session = request.getSession();
 			session.setAttribute("loginUser", user);
+			
+			// スケジュールリスト取得を担当するGetScheduleLogicクラスを生成
+			GetScheduleLogic scheduleBo = new GetScheduleLogic();
 
+			// 引数として現在の年月を渡して、データベースから
+			// 引数の期間のスケジュールリストを取得するexecuteメソッドを呼び出す
+			YearMonth currentYearMonth = YearMonth.now();
+			int userId = user.getId();
+			List<Schedule> scheduleList = scheduleBo.execute(currentYearMonth, userId);
+			
+			// 取得したリストをセッションスコープに保存
+			session.setAttribute("scheduleList", scheduleList);
+			
 			//メイン画面にフォワード
 			RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/main.jsp");
 			dispatcher.forward(request, response);

@@ -191,34 +191,36 @@ renderCalendar(today.getFullYear(), today.getMonth());
 ////////////////////////////////////////////////////////////////////
 
 $(document).ready(function() {
-    $('#add-task').on('click', function() {
-    // すでに .addBox が存在するかチェック
-    if ($('.addBox').length === 0) {
-        // class="today-task"の要素を取得
-        const taskBox = document.querySelector(".today-task");
-
-        // today-taskボックスの中身をクリア
-        taskBox.innerHTML = "";    
-
-        const addBoxHtml = `
-        <div class="addBox">
-            <p>新規予定入力</p>
-            <form action="#" method="post">
-            <label for="add-Date">日付を選択：</label>
-            <input type="date" name="add-Date"><br>
-            <label for="add-Schedule">予定内容　：</label>
-            <input type="text" name="add-Schedule" placeholder="予定を入力"><br>
-            <div class="comment-Area">
-                <div class="comment">備考　　　：</div>
-                <div class="comment-Box"><textarea name="add-Comment"></textarea></div>
-            </div>
-            <button type="submit">予定を追加</button>
-            </form>
-        </div>
-        `;
-        $('.today-task').append(addBoxHtml);
-    }
-    });
+	$('#add-task').on('click', function() {
+	    // すでに .addBox が存在するかチェック
+		if ($('.addBox').length === 0) {
+	        // class="today-task"の要素を取得
+			const taskBox = document.querySelector(".today-task");
+	
+			// today-taskボックスの中身をクリア
+			taskBox.innerHTML = "";    
+	
+			const addBoxHtml = `
+			<div class="addBox">
+				<p>新規予定入力</p>
+	
+				<form action="AddScheduleServlet" method="post">
+					<label for="add-Date">日付を選択：</label>
+					<input type="date" name="add-Date"><br>
+					<label for="add-ScheduleName">予定内容　：</label>
+					<input type="text" name="add-ScheduleName" placeholder="予定を入力"><br>
+					<div class="comment-Area">
+						<div class="comment">備考　　　：</div>
+						<div class="comment-Box"><textarea name="add-Comment"></textarea></div>
+					</div>
+					<input type="hidden" name="add-UserId" value="${userId}">
+					<button type="submit">予定を追加</button>
+				</form>
+			</div>
+			`;
+			$('.today-task').append(addBoxHtml);
+		}
+	});
 });
 
 // ↑↑ 新規予定作成ボタンクリック時 ここまで ↑↑
