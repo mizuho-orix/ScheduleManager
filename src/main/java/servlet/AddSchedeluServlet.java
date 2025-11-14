@@ -28,8 +28,7 @@ public class AddSchedeluServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+
 	}
 
 	/**
@@ -52,7 +51,8 @@ public class AddSchedeluServlet extends HttpServlet {
 		// 備考を取得
 		String comment = request.getParameter("add-Comment");
 		
-	
+		
+		
 	}
 
 }

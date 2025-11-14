@@ -10,5 +10,17 @@ public class Schedule {
 		this.schedule_Date = schedule_Date;
 		this.Comment = comment;
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public String getSchedule_Date() {
+		return schedule_Date;
+	}
+
+	public String getComment() {
+		return Comment;
+	}
 	
 }
