@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.time.YearMonth;
 import java.util.List;
 
 import jakarta.servlet.RequestDispatcher;
@@ -12,9 +13,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import model.GetMutterListLogic;
+import model.GetScheduleLogic;
 import model.Mutter;
 import model.PostMutterLogic;
+import model.Schedule;
 import model.User;
+
 
 /**
  * Servlet implementation class Main
@@ -23,9 +27,6 @@ import model.User;
 public class Main extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public Main() {
         super();
         // TODO Auto-generated constructor stub
@@ -34,11 +35,14 @@ public class Main extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		//つぶやき一覧を取得してリストに保存
-		GetMutterListLogic getMutterListLogic = new GetMutterListLogic();
-		List<Mutter> mutterList = getMutterListLogic.execute();
+		GetScheduleLogic getScheduleLogic = new GetScheduleLogic();
+
+		YearMonth currentYearMonth = YearMonth.now();
+		int userId = 1;
+		List<Schedule> scheduleList = getScheduleLogic.execute(currentYearMonth, userId);
 		
 		//リストをリクエストスコープに保存
-		request.setAttribute("mutterList", mutterList);
+		request.setAttribute("scheduleList", scheduleList);
 		
 		// ログインしているか確認するため
 		// セッションスコープからユーザー情報を取得

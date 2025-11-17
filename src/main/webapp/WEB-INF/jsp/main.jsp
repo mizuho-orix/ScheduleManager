@@ -1,12 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="model.User, model.Mutter, java.util.List" %>
+<%@ page import="model.User, model.Mutter, model.Schedule, java.util.List" %>
 <%
 	//セッションスコープに保存されたユーザー情報を取得
 	User loginUser = (User)session.getAttribute("loginUser");
 
 	//リクエストスコープに保存されたつぶやきリストを取得
 	List<Mutter> mutterList = (List<Mutter>)request.getAttribute("mutterList");
+
+	// セッションスコープに保存されたスケジュールリストを取得	
+	List<Schedule> scheduleList = (List<Schedule>)session.getAttribute("scheduleList");
 	
 	//リクエストスコープに保存されたエラーメッセージを取得
 	String errorMsg = (String)request.getAttribute("errorMsg");
@@ -71,25 +74,63 @@
 
 
 			<a href="Main"><input type="submit" value="更新"></a>
-			<form action="Main" method="post">
+			<form action="Main" method="gett">
 			<input type="text" name="text">
 			<input type="submit" value="つぶやく">
 			</form>
-			<br>
+
+			<% if (scheduleList != null) { %>
+				<p>スケジュールリスト読み込めてる</p>
+			<% } %>
+			<% for (Schedule schedule : scheduleList) { %>
+				<p><%= schedule.getSchedule_Name() %></p>
+			<% } %>
 		</section>
 	</div>
 </body>
 <footer>
 </footer>
+<!--	jQuery読み込み-->
+<script src="<%= request.getContextPath() %>/js/jquery-3.4.1.min.js" type="text/javascript"></script>
 
-	<!--	jQuery読み込み-->
-	<script src="<%= request.getContextPath() %>/js/jquery-3.4.1.min.js" type="text/javascript"></script>
+<!--	jsp内で読み取ったセッションスコープの内容を外部jsファイルで使用する為に
+		jspファイル内でスコープの内容を変数に格納 -->
+<script>
+	const userId = "<%= loginUser.getId() %>";
+</script>
 
-	<!--	jsp内で読み取ったセッションスコープの内容を外部jsファイルで使用する為に
-			jspファイル内でスコープの内容を変数に格納 -->
-	<script>
-		const userId = "<%= loginUser.getId() %>";
-	</script>
+<script>
+	// リクエストスコープのscheduleListをjsonに変換する
+	const scheduleList = [
+		// scheduleListが取得できているか判定して変数に格納
+		// (スクリプト文の中の「scheduleList」はリクエストスコープ)
+		<% if (session.getAttribute("scheduleList") != null) {
+			List<Schedule> calendarSchedule = (List<Schedule>) session.getAttribute("scheduleList");
 
-	<script src="<%= request.getContextPath() %>/js/calendar.js" type="text/javascript"></script>	
+			// calendarScheduleの要素数だけ繰り返す
+			for (int i = 0; i < calendarSchedule.size(); i++) {
+				// リストのi番目の各要素をそれぞれ変数に格納
+				Schedule s = calendarSchedule.get(i);
+				int id = s.getId();
+				String date = s.getSchedule_Date().toString(); // 例: "2025-11-17"
+				String name = s.getSchedule_Name().replace("\"", "\\\""); // ダブルクォートをエスケープ
+				String comment = s.getComment().replace("\"", "\\\"");
+		%>
+				// JSONファイルに変換
+				{
+				id: "<%= id %>",
+				date: "<%= date %>",
+				name: "<%= name %>",
+				comment: "<%= comment %>"
+				}
+
+				// iがcalendarScheduleの要素数の間、JSONの末尾に「,」を付ける
+				// 最後の要素数の場合は何も付けない
+				<%= (i < calendarSchedule.size() - 1) ? "," : "" %>
+		<%	}
+		} 	%>
+	 ];
+</script>
+
+<script src="<%= request.getContextPath() %>/js/calendar.js" type="text/javascript"></script>	
 </html>

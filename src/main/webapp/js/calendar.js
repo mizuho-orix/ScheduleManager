@@ -104,7 +104,7 @@ function renderCalendar(year, month) {
         let li = document.createElement("li");
 
         // <li>の内容を入力して<ul>に追加
-        li.textContent = "12:00~ 東京ビッグサイト　展示会";
+        li.textContent = "12:00~ 東京ビッグサイト　展示会";		
         ul.appendChild(li);
 
         // 作成したcellが本日の日付であった場合
@@ -179,6 +179,91 @@ monthSelect.addEventListener("change", updateCalendar);
 // 初期表示（引数は今日の年、今日の月）
 renderCalendar(today.getFullYear(), today.getMonth());
 
+
+// ↑↑ カレンダー表示ここまで ↑↑
+////////////////////////////////////////////////////////////////////
+
+
+
+
+
+////////////////////////////////////////////////////////
+// カレンダーにJSONから読み込んだ予定を追加
+////////////////////////////////////////////////////////
+
+function renderCalendar(year, month) {
+	const firstDay = new Date(year, month, 1).getDay();			// 月初の曜日
+	const lastDate = new Date(year, month + 1, 0).getDate();	// 月末日（翌月の0日＝今月の最終日）
+	
+	// カレンダーの曜日を除いた日付のエリアを取得→内容をクリア
+	const tbody = document.querySelector("#calendar tbody");
+	tbody.innerHTML = "";
+	
+	// 新しい行を作成
+	let row = document.createElement("tr");
+
+	// 月初の曜日まで空白セルを追加
+	for (let i = 0; i < firstDay; i++) {
+		row.appendChild(document.createElement("td"));
+	}
+
+	// 最終日までのセルを作成する
+	for (let dateNum = 1; dateNum <= lastDate; dateNum++) {
+		
+		// 月末日までのセルを作成して日付を表示
+		const cell = document.createElement("td");
+		cell.textContent = dateNum;
+	
+		const ul = document.createElement("ul");
+	
+		// 引数で受け取った年月+現在ループ中の日付をYYYY-MM-DD形式に変換
+		const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateNum).padStart(2, '0')}`;
+	
+		// main.jspの<script>内の変数scheduleList(JSON)から該当日の予定を抽出
+		// s(オブジェクト)のdate(日付)がdateStrと一致するものを抽出
+		const tasks = scheduleList.filter(s => s.date === dateStr);
+		
+        // taskの中にJSONで取得された予定が格納されているので
+        // プロパティを指定して<li>要素を作成し、ulに追加していく
+		tasks.forEach((task, index) => {
+			const li = document.createElement("li");
+			li.textContent = task.name + (task.comment ? `（${task.comment}）` : "");
+			li.id = `task-${task.id}`; // 予定IDをliのid属性に設定
+
+            // データ属性としてIDを持たせることも可能
+            // li.dataset.scheduleId = task.id;
+
+            // 予定をulに追加
+            ul.appendChild(li);
+		});
+	
+		cell.appendChild(ul);
+	
+		if (dateNum === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+			cell.classList.add("today");
+		}
+	
+		cell.addEventListener("click", () => {
+			const taskBox = document.querySelector(".today-task");
+			taskBox.innerHTML = "";
+	
+			const dayTitle = document.createElement("p");
+			dayTitle.textContent = `${year}年${month + 1}月${dateNum}日の予定`;
+			taskBox.appendChild(dayTitle);
+
+			if (ul) {
+				const copyUl = ul.cloneNode(true);
+				taskBox.appendChild(copyUl);
+			}
+		});
+	
+		row.appendChild(cell);
+		if ((dateNum + firstDay) % 7 === 0 || dateNum === lastDate) {
+			tbody.appendChild(row);
+			row = document.createElement("tr");
+		}
+	}
+}
 
 // ↑↑ カレンダー表示ここまで ↑↑
 ////////////////////////////////////////////////////////////////////

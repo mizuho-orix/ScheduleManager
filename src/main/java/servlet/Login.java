@@ -49,11 +49,11 @@ public class Login extends HttpServlet {
 		// ログイン情報を渡してデータベースから
 		// ユーザーIDとパスワードが合致するユーザーがいるかを照合する
 		// executeメソッドを呼び出す
-		User user = loginBo.execute(loginInfo);		
+		User user = loginBo.execute(loginInfo);	
 						
 		//ログイン成功時の処理
 		if (user != null) {
-			//ユーザー情報が格納されたクラスuserをセッションスコープに保存
+			// ユーザー情報が格納されたクラスuserをセッションスコープに保存
 			//（セッションスコープを作成し、"loginUser"と名付け、クラス「user」を格納）
 			HttpSession session = request.getSession();
 			session.setAttribute("loginUser", user);
@@ -70,7 +70,7 @@ public class Login extends HttpServlet {
 			// 取得したリストをセッションスコープに保存
 			session.setAttribute("scheduleList", scheduleList);
 			
-			//メイン画面にフォワード
+			// メイン画面にフォワード
 			RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/main.jsp");
 			dispatcher.forward(request, response);
 		

@@ -4,6 +4,7 @@ package dao;
 // SCHEDULESテーブルに接続するクラス
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +14,6 @@ import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Mutter;
 import model.Schedule;
 
 public class SchedulesDAO {
@@ -26,7 +26,7 @@ public class SchedulesDAO {
 	// SCHEDULESテーブルから取得するメソッド
 	public List<Schedule> findSchedule(YearMonth yearMonth, int userId) {
 		// 取得したスケジュールを格納するリストを作成
-		List<Schedule> ScheduleList = new ArrayList<>();
+		List<Schedule> scheduleList = new ArrayList<>();
 		
 		// 引数の年月の月初を取得
 		LocalDate start = yearMonth.atDay(1);
@@ -48,28 +48,33 @@ public class SchedulesDAO {
 			String sql = "SELECT ID, SCHEDULE_DATE, SCHEDULE, COMMENT FROM SCHEDULES WHERE USER_ID = ? AND (SCHEDULE_DATE BETWEEN ? AND ?) ORDER BY SCHEDULE_DATE";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 
-			pStmt.setInt(1, userId);
-			pStmt.setDate(2, java.sql.Date.valueOf(start));
-			pStmt.setDate(3, java.sql.Date.valueOf(end));
+			pStmt.setInt(1, userId);	// ユーザーID
+			pStmt.setDate(2, java.sql.Date.valueOf(start));	// SQL用の日付に変換した月初の値
+			pStmt.setDate(3, java.sql.Date.valueOf(end));		// SQL用の日付に変換した月末の値
 			
 			//SELECT文を実行
 			ResultSet rs = pStmt.executeQuery();
 			
 			//SELECT文の結果をArrayListに格納
 			while (rs.next()) {
-				int id = rs.getInt("ID");
+				int id = rs.getInt("ID");	// 予定ID
+				
+				// DATE型のカラムをDate型変数に格納し、LocalDate型に変換する
+				Date sqlDate = rs.getDate("SCHEDULE_DATE");				
+				LocalDate schedule_Date = sqlDate.toLocalDate();
+				
+				String schedule_Name = rs.getString("schedule");	// スケジュール名
+				String comment = rs.getString("COMMENT");			// 備考
+				
+				// 1件分の予定を、クラスを生成して格納
+				Schedule schedule = new Schedule(id, schedule_Date, schedule_Name, comment);
+				
+				scheduleList.add(schedule);
 				
 				// 11/14ここまで
 				// 取得したSQLからスケジュールリストを作成するところから続き
-				// 取得した予定をjsonにできるか…？
+				// 取得した予定をjsonにできるか…？	
 				
-				
-				String userName = rs.getString("NAME");
-				String text = rs.getString("TEXT");
-				Mutter mutter = new Mutter(id, userName, text);
-				
-				
-				mutterList.add(mutter);
 			}
 		} catch (SQLException e) {
 			//エラー内容を出力する
@@ -77,8 +82,7 @@ public class SchedulesDAO {
 			return null;
 		}
 		
-		return mutterList;
-
+		return scheduleList;
 	}
 	
 	
