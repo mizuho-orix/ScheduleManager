@@ -67,12 +67,6 @@
 	  <tbody></tbody>
 	</table>
 
-
-
-
-
-
-
 			<a href="Main"><input type="submit" value="更新"></a>
 			<form action="Main" method="gett">
 			<input type="text" name="text">
@@ -100,8 +94,8 @@
 </script>
 
 <script>
-	// リクエストスコープのscheduleListをjsonに変換する
-	const scheduleList = [
+	// セッションスコープのscheduleListをjsonに変換する
+	let scheduleList = [
 		// scheduleListが取得できているか判定して変数に格納
 		// (スクリプト文の中の「scheduleList」はリクエストスコープ)
 		<% if (session.getAttribute("scheduleList") != null) {

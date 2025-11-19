@@ -66,15 +66,9 @@ public class SchedulesDAO {
 				String schedule_Name = rs.getString("schedule");	// スケジュール名
 				String comment = rs.getString("COMMENT");			// 備考
 				
-				// 1件分の予定を、クラスを生成して格納
-				Schedule schedule = new Schedule(id, schedule_Date, schedule_Name, comment);
-				
+				// 1件分の予定をScheduleクラスを生成して格納し、リストに追加
+				Schedule schedule = new Schedule(id, schedule_Date, schedule_Name, comment);				
 				scheduleList.add(schedule);
-				
-				// 11/14ここまで
-				// 取得したSQLからスケジュールリストを作成するところから続き
-				// 取得した予定をjsonにできるか…？	
-				
 			}
 		} catch (SQLException e) {
 			//エラー内容を出力する

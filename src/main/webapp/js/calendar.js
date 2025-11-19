@@ -60,133 +60,6 @@ for (let m = 0; m < 12; m++) {
     monthSelect.appendChild(option);
 }
 
-// カレンダーの作成
-function renderCalendar(year, month) {
-
-    // getDayメソッドで今月の月初の曜日を取得（0:日曜～6:土曜)
-    const firstDay = new Date(year, month, 1).getDay();
-
-    // 今月の月末日を格納
-    const lastDate = new Date(year, month + 1, 0).getDate();
-
-    // htmlのID「calendar」の中の「tbody」タグを取得
-    // (ここにカレンダーの中身を追加していく)
-    const tbody = document.querySelector("#calendar tbody");
-
-    // 「tbody」タグ内の内容を削除
-    // （年月変更時にカレンダーを削除するため)
-    tbody.innerHTML = "";
-
-    // 新しい<tr>行を作成する
-    let row = document.createElement("tr");
-
-    // firstDayに格納された月初の曜日が来るまで
-    // 空のデータを追加していく
-    for (let i = 0; i < firstDay; i++) {
-        // <tr>の中に<td>を追加
-        row.appendChild(document.createElement("td"));
-    }
-
-    // dateNumが月末の日付になるまで処理を繰り返す
-    for (let dateNum = 1; dateNum <= lastDate; dateNum++) {
-
-        // 新しい日付のセル<td>を変数cellとして作成
-        const cell = document.createElement("td");
-
-        // 作成したcellに日付を入力
-        cell.textContent = dateNum;
-
-        // 予定表示用のリストulを作成して<td>に追加
-        const ul = document.createElement("ul");
-        cell.appendChild(ul);
-
-        // 予定内容の項目<li>を作成
-        let li = document.createElement("li");
-
-        // <li>の内容を入力して<ul>に追加
-        li.textContent = "12:00~ 東京ビッグサイト　展示会";		
-        ul.appendChild(li);
-
-        // 作成したcellが本日の日付であった場合
-        // cell(<td>タグ)にclass「today」を追加する
-        if (dateNum === today.getDate() &&
-            month === today.getMonth() &&
-            year === today.getFullYear()
-        ) {
-            cell.classList.add("today");
-        }
-
-        // カレンダーの日付をクリックすると、class="today-task"の
-        // ボックス内にタスク予定を表示するイベントを追加
-        // （cellをクリック時、=>{}の中身の処理を実行する）
-        cell.addEventListener("click", () => {
-            const taskBox = document.querySelector(".today-task");
-
-            // taskBoxの中身をクリア
-            taskBox.innerHTML = "";
-
-            // クリックしたカレンダーの日付を表示today-taskのボックスに表示
-            const dayTitle = document.createElement("p");
-            dayTitle.textContent = `${year}年${month + 1}月${dateNum}日の予定`;
-            taskBox.appendChild(dayTitle);
-
-            // クリックしたカレンダーのulを取得
-            const calendarUl = cell.querySelector("ul");
-
-            // ulが存在した時（calendarUl=true）
-            // <ul>内の<li>等の子要素を含めて複製して、today-taskに追加表示する
-            if (calendarUl) {
-                const copyUl = calendarUl.cloneNode(true); //appendChildだとカレンダーから消えるのでNG
-                taskBox.appendChild(copyUl);
-            }
-        });
-
-        // <tr>の中に、<td>として作成した変数cellを追加
-        row.appendChild(cell);
-
-        // 現在処理中の日付(dateNum)と月初の曜日(firstDay)の合計が7の倍数の時か、
-        // dateNumが月末日に達した時は1週間分の処理が終了するので
-        // 作成したrowをカレンダーに追加する処理
-        if ((dateNum + firstDay) % 7 === 0 || dateNum === lastDate) {
-
-            // 現在の行の変数rowを追加
-            tbody.appendChild(row);
-
-            // 次週用に新しい行<tr>を作成
-            row = document.createElement("tr");
-        }
-    }
-}
-
-// カレンダーの選択肢を変更した時の処理
-function updateCalendar() {
-
-    // ドロップダウンメニューで選択された年を取得
-    // （取得された値は文字列の為、数値に変換）
-    const year = parseInt(yearSelect.value);
-
-    // ドロップダウンメニューで選択された月を取得
-    const month = parseInt(monthSelect.value);
-
-    // 引数に選択された年月を渡してカレンダー作成を実行
-    renderCalendar(year, month);
-}
-
-// 年か月のドロップダウンメニューが変更された時にuddateCalendarを実行
-yearSelect.addEventListener("change", updateCalendar);
-monthSelect.addEventListener("change", updateCalendar);
-
-// 初期表示（引数は今日の年、今日の月）
-renderCalendar(today.getFullYear(), today.getMonth());
-
-
-// ↑↑ カレンダー表示ここまで ↑↑
-////////////////////////////////////////////////////////////////////
-
-
-
-
-
 ////////////////////////////////////////////////////////
 // カレンダーにJSONから読み込んだ予定を追加
 ////////////////////////////////////////////////////////
@@ -237,36 +110,113 @@ function renderCalendar(year, month) {
             ul.appendChild(li);
 		});
 	
+		// 作成した予定表示用のulをcellに追加
 		cell.appendChild(ul);
 	
+		// 本日の日付であればcellにclass「today」を追加
 		if (dateNum === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
 			cell.classList.add("today");
 		}
 	
+		// カレンダーの日付をクリックすると、class="today-task"の
+		// ボックス内にタスク予定を表示するイベントを追加
+		// （cellをクリック時、=>{}の中身の処理を実行する）
 		cell.addEventListener("click", () => {
 			const taskBox = document.querySelector(".today-task");
+
+			// taskBoxの中身をクリア
 			taskBox.innerHTML = "";
 	
+			// クリックしたカレンダーの日付を表示today-taskのボックスに表示
 			const dayTitle = document.createElement("p");
 			dayTitle.textContent = `${year}年${month + 1}月${dateNum}日の予定`;
 			taskBox.appendChild(dayTitle);
 
+			// 追加したulが存在した時（ul=true）
+			// <ul>内の<li>等の子要素を含めて複製して、today-taskに追加表示する
 			if (ul) {
 				const copyUl = ul.cloneNode(true);
+
+				// taskBoxの中身をクリア
 				taskBox.appendChild(copyUl);
 			}
 		});
 	
+		// 現在処理中の日付(dateNum)と月初の曜日(firstDay)の合計が7の倍数の時か、
+		// dateNumが月末日に達した時は1週間分の処理が終了するので
+		// 作成したrowをカレンダーに追加する処理
 		row.appendChild(cell);
 		if ((dateNum + firstDay) % 7 === 0 || dateNum === lastDate) {
+
+			// 現在の行の変数rowを追加
 			tbody.appendChild(row);
+
+			// 次週用に新しい行<tr>を作成
 			row = document.createElement("tr");
 		}
 	}
 }
 
-// ↑↑ カレンダー表示ここまで ↑↑
+// ↑↑ カレンダーにJSONから読み込んだ予定を追加　ここまで ↑↑
 ////////////////////////////////////////////////////////////////////
+
+
+// カレンダーの選択肢を変更した時の処理
+function updateCalendar() {
+
+    // ドロップダウンメニューで選択された年を取得
+    // （取得された値は文字列の為、数値に変換）
+    const year = parseInt(yearSelect.value);
+
+    // ドロップダウンメニューで選択された月を取得
+    const month = parseInt(monthSelect.value);
+
+    // Ajaxでサーバーから予定データを取得
+    // getSchedulesサーブレットに変数yearとmonthを送信
+	fetch(`GetScheduleServlet?year=${year}&month=${month + 1}`, {
+		credentials: 'include'
+		})
+		
+        // サーブレットからのレスポンスをJSON形式で取得
+        .then(response => {
+			if (!response.ok) {
+				throw new Error(`HTTP error ${response.status}`);
+			}
+			return response.json();
+		})
+
+        	// 取得したJSONデータ（data）の処理
+            .then(data => {
+				// サーバーから取得したJSONデータをscheduleListに格納
+				// (scheduleListの中にはデータベースのカラム名でプロパティが
+				//  格納されているので、JavaScript側の形式に変換する)
+				scheduleList = data.map(s => ({
+					id: s.id,
+					date: s.schedule_Date,
+					name: s.schedule_Name,
+					comment: s.comment
+				}));
+
+				// 引数に選択された年月を渡してカレンダー作成を実行
+				renderCalendar(year, month);
+            })
+	// エラー時の処理
+	.catch(error => {
+		console.error("スケジュールの取得に失敗しました:", error);
+	});
+}
+
+// 年か月のドロップダウンメニューが変更された時にuddateCalendarを実行
+yearSelect.addEventListener("change", updateCalendar);
+monthSelect.addEventListener("change", updateCalendar);
+
+// 初期表示（引数は今日の年、今日の月）
+renderCalendar(today.getFullYear(), today.getMonth());
+
+
+
+
+
 
 
 

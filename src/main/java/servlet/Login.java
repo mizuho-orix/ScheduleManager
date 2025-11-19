@@ -66,9 +66,12 @@ public class Login extends HttpServlet {
 			YearMonth currentYearMonth = YearMonth.now();
 			int userId = user.getId();
 			List<Schedule> scheduleList = scheduleBo.execute(currentYearMonth, userId);
-			
+
+			// 取得したユーザーIDをセッションスコープに保存
+			session.setAttribute("userId", userId);
+
 			// 取得したリストをセッションスコープに保存
-			session.setAttribute("scheduleList", scheduleList);
+			session.setAttribute("scheduleList", scheduleList);			
 			
 			// メイン画面にフォワード
 			RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/main.jsp");
