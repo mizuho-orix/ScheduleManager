@@ -13,7 +13,10 @@ const monthSelect = document.getElementById("month");
 // 日付を格納する変数を作成
 const today = new Date();
 
-// 年と月の選択肢を生成
+///////////////////////////////////////////////////////
+// 年のドロップダウンメニューを生成
+//////////////////////////////////////////////////////
+
 // yを2000から始めて2030までループ
 for (let y = 2000; y <= 2030; y++) {
 
@@ -37,6 +40,10 @@ for (let y = 2000; y <= 2030; y++) {
     yearSelect.appendChild(option);
     
 }
+
+///////////////////////////////////////////////////////
+// 月のドロップダウンメニューを生成
+//////////////////////////////////////////////////////
 
 // 0～11まで繰り返して月の選択肢を表示するドロップダウンメニューを作成
 for (let m = 0; m < 12; m++) {
@@ -157,11 +164,11 @@ function renderCalendar(year, month) {
 	}
 }
 
-// ↑↑ カレンダーにJSONから読み込んだ予定を追加　ここまで ↑↑
-////////////////////////////////////////////////////////////////////
 
-
+////////////////////////////////////////////////////////
 // カレンダーの選択肢を変更した時の処理
+////////////////////////////////////////////////////////
+
 function updateCalendar() {
 
     // ドロップダウンメニューで選択された年を取得
@@ -206,21 +213,6 @@ function updateCalendar() {
 	});
 }
 
-// 年か月のドロップダウンメニューが変更された時にuddateCalendarを実行
-yearSelect.addEventListener("change", updateCalendar);
-monthSelect.addEventListener("change", updateCalendar);
-
-// 初期表示（引数は今日の年、今日の月）
-renderCalendar(today.getFullYear(), today.getMonth());
-
-
-
-
-
-
-
-
-
 ////////////////////////////////////////////////////////////////////
 // 新規予定作成ボタンをクリック時
 ////////////////////////////////////////////////////////////////////
@@ -260,6 +252,14 @@ $(document).ready(function() {
 
 // ↑↑ 新規予定作成ボタンクリック時 ここまで ↑↑
 ////////////////////////////////////////////////////////////////////
+
+
+// 年か月のドロップダウンメニューが変更された時にuddateCalendarを実行
+yearSelect.addEventListener("change", updateCalendar);
+monthSelect.addEventListener("change", updateCalendar);
+
+// 初期表示（引数は今日の年、今日の月）
+renderCalendar(today.getFullYear(), today.getMonth());
 
 
 

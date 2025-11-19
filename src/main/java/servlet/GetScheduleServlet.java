@@ -28,8 +28,6 @@ public class GetScheduleServlet extends HttpServlet {
 	// 変更した時にfetchから呼び出される
 	// ドロップダウンメニューの年月を受け取ってJSONファイルを返す
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// Ajaxのリクエストから送られてきたrequestの引数から
-		// yearとmonthを取り出して、int型→YearMonth型に変換して格納
 		try {
 			String yearStr = request.getParameter("year");
 			String monthStr = request.getParameter("month");
@@ -39,6 +37,8 @@ public class GetScheduleServlet extends HttpServlet {
 				return;
 			}
 			
+			// Ajaxのリクエストから送られてきたrequestの引数から
+			// yearとmonthを取り出して、int型→YearMonth型に変換して格納
 			int year = Integer.parseInt(request.getParameter("year"));
 			int month = Integer.parseInt(request.getParameter("month"));		
 			YearMonth yearMonth = YearMonth.of(year, month);
@@ -51,8 +51,6 @@ public class GetScheduleServlet extends HttpServlet {
 			}
 
 			int userId = (int) userObj;
-			System.out.println(userId);
-			System.out.println(yearMonth);
 		
 			GetScheduleLogic getScheduleLogic = new GetScheduleLogic();
 			List<Schedule> scheduleList = getScheduleLogic.execute(yearMonth, userId);
@@ -62,14 +60,13 @@ public class GetScheduleServlet extends HttpServlet {
 				return;
 			}
 
-			// JSONに変換
+			// JSONファイルに変換
 			Gson gson = new GsonBuilder()
 					.registerTypeAdapter(LocalDate.class, (com.google.gson.JsonSerializer<LocalDate>)
 							(src, typeOfSrc, context) -> new com.google.gson.JsonPrimitive(src.toString()))
 					.create();
 
 			String json = gson.toJson(scheduleList);
-			System.out.println(json);
         
 			// JSON形式のファイルをresponseにセット
 			response.setContentType("application/json; charset=UTF-8");
@@ -83,9 +80,6 @@ public class GetScheduleServlet extends HttpServlet {
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
