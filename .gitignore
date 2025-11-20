@@ -24,6 +24,14 @@ Thumbs.db
 .env
 *.properties
 
+# Python / build
+__pycache__/
+dist/
+build/
+
 # === db ===
 *.mv.db
 *.trace.db
+
+# Images you might export repeatedly
+docs/*.bak

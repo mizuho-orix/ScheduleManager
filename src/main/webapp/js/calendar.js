@@ -102,52 +102,39 @@ function renderCalendar(year, month) {
 		// main.jspの<script>内の変数scheduleList(JSON)から該当日の予定を抽出
 		// s(オブジェクト)のdate(日付)がdateStrと一致するものを抽出
 		const tasks = scheduleList.filter(s => s.date === dateStr);
-		
+				
         // taskの中にJSONで取得された予定が格納されているので
         // プロパティを指定して<li>要素を作成し、ulに追加していく
 		tasks.forEach((task, index) => {
 			const li = document.createElement("li");
-			li.textContent = task.name + (task.comment ? `（${task.comment}）` : "");
-			li.id = `task-${task.id}`; // 予定IDをliのid属性に設定
 
-            // データ属性としてIDを持たせることも可能
-            // li.dataset.scheduleId = task.id;
+			// li要素に予定名とID属性を設定
+			li.textContent = task.name;
+			li.id = `task-${task.id}`;
 
-            // 予定をulに追加
-            ul.appendChild(li);
+			// データ属性としてIDを持たせることも可能
+			// li.dataset.scheduleId = task.id;
+
+			// 作成した<li>をulに追加
+			ul.appendChild(li);
 		});
 	
 		// 作成した予定表示用のulをcellに追加
 		cell.appendChild(ul);
 	
-		// 本日の日付であればcellにclass「today」を追加
+		// 本日の日付であればcellにclass「today」を追加し、
+        // 本日の予定をボックスに初期表示する
 		if (dateNum === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
 			cell.classList.add("today");
+            showTasksForDate(year, month, dateNum, ul);
 		}
 	
 		// カレンダーの日付をクリックすると、class="today-task"の
 		// ボックス内にタスク予定を表示するイベントを追加
 		// （cellをクリック時、=>{}の中身の処理を実行する）
 		cell.addEventListener("click", () => {
-			const taskBox = document.querySelector(".today-task");
-
-			// taskBoxの中身をクリア
-			taskBox.innerHTML = "";
-	
-			// クリックしたカレンダーの日付を表示today-taskのボックスに表示
-			const dayTitle = document.createElement("p");
-			dayTitle.textContent = `${year}年${month + 1}月${dateNum}日の予定`;
-			taskBox.appendChild(dayTitle);
-
-			// 追加したulが存在した時（ul=true）
-			// <ul>内の<li>等の子要素を含めて複製して、today-taskに追加表示する
-			if (ul) {
-				const copyUl = ul.cloneNode(true);
-
-				// taskBoxの中身をクリア
-				taskBox.appendChild(copyUl);
-			}
-		});
+            showTasksForDate(year, month, dateNum, ul);
+        });
 	
 		// 現在処理中の日付(dateNum)と月初の曜日(firstDay)の合計が7の倍数の時か、
 		// dateNumが月末日に達した時は1週間分の処理が終了するので
@@ -166,7 +153,52 @@ function renderCalendar(year, month) {
 
 
 ////////////////////////////////////////////////////////
-// カレンダーの選択肢を変更した時の処理
+// 指定したカレンダーの日付の予定をtoday-taskボックスに表示
+////////////////////////////////////////////////////////
+
+function showTasksForDate(year, month, dateNum, ul) {
+	// 予定表示用ボックスの要素を取得して中身をクリア
+	const taskBox = document.querySelector(".today-task");
+	taskBox.innerHTML = "";
+
+	// 指定したカレンダーの年月日を表示するp要素を作成
+	const dayTitle = document.createElement("p");
+
+	// 引数で受け取った年月日をボックスに追加
+	dayTitle.textContent = `${year}年${month + 1}月${dateNum}日の予定`;
+	taskBox.appendChild(dayTitle);
+
+	// カレンダー内に予定表示用のulが存在した場合、
+	// <ul>内の<li>要素today-taskに表示する
+	if (ul) {
+		// ul内のすべてのli要素を取得
+	    const items = ul.querySelectorAll("li");
+
+		// 予定表示用ボックスに追加するul要素を作成
+		const newUl = document.createElement("ul");
+
+		// 取得したli要素をループして新しいulに追加
+		items.forEach(li => {
+			const newLi = document.createElement("li");
+			const span = document.createElement("span");
+
+			span.textContent = li.textContent;
+			span.classList.add("task-box");	// class="task-box"を追加
+
+			newLi.appendChild(span);
+			newUl.appendChild(newLi);
+		});
+		
+		taskBox.appendChild(newUl);
+
+		// const copyUl = ul.cloneNode(true);
+	    // taskBox.appendChild(copyUl);
+	}
+}
+
+
+////////////////////////////////////////////////////////
+// カレンダーの年月を変更した時の処理
 ////////////////////////////////////////////////////////
 
 function updateCalendar() {

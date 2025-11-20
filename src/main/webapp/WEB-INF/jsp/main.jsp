@@ -36,7 +36,6 @@
 		</header>
 		
 		<section>
-			<h1>本日のタスク</h1>
 		    <div class="menu">
 				<ul class="command">
 				  <li id="add-task">新規予定入力</li>
@@ -44,12 +43,8 @@
 				  <li>活動履歴</li>
 				</ul>
 			<div class="today-task">
-				本日の予定表示
 			</div>
 	</div>
-
-
-
 
 	<div class="controls">
 		<label for="year">年:</label>

@@ -1,6 +1,6 @@
 header {
-    background-color: #1aaedb;
-    border-bottom: #ead963 6px solid;
+	background-color: #1aaedb;
+	border-bottom: #ead963 6px solid;
 }
 
 body {
@@ -8,6 +8,10 @@ body {
   background-color: #f2f2f2;
   max-width: 1200px;
   margin: auto;
+}
+
+section {
+	margin-top: 2rem;
 }
 
 .contents {
@@ -25,10 +29,6 @@ body {
 
 .logo {
   width: 100px;
-}
-
-h1 {
-  text-align: center;
 }
 
 .menu {
@@ -78,6 +78,15 @@ h1 {
   border-radius: 0.5rem;
 }
 
+.today-task p {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.today-task ul {
+	padding-left: 1.5rem;
+}
+
 .login-status {
   display: flex;
   justify-content: center;
@@ -90,10 +99,33 @@ h2 {
   margin-top: 0.5rem;
 }
 
-/* 予定表示用ボックス */
+/* 予定表示ボックス内の予定名を囲むli要素 */
+.task-box {
+	display: inline-block;
+	background-color: #ffffff;
+	border: 1px solid #87cefa;
+	border-radius: 8px;
+	padding: 6px 10px;
+	margin: 4px 0;
+	font-size: 14px;
+	color: #333;
+}
+
+/* 予定表示ボックス内の予定ボックスにカーソルを
+   乗せた時のアクション */
+.task-box:hover {
+	border-color: #3399ff;         /* ホバー時の枠線色 */
+	cursor: pointer;               /* マウスカーソルをポインターに */
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* 軽い影を追加 */
+	transform: translateY(-1px);   /* 少し浮かせるような動き */
+	transition: all 0.2s ease;     /* なめらかな変化 */
+}
+
+
+/* 新規予定入力時に表示されるボックス */
 .addBox {
-  height: 85%;
-  margin-bottom: 1.5rem;
+	height: 85%;
+  	margin-bottom: 1.5rem;
 }
 
 /* 新規予定入力時のタイトル */
@@ -158,13 +190,13 @@ th {
 td {
 	font-size: 14px;
 	background-color: #fff;
-  height: 120px;
+	height: 120px;
 	text-align: right;
 	vertical-align: top;
 }
 
 .today {
-  background-color: #ffeb3b;
+	background-color: #ffeb3b;
 }
 
 tbody ul  {
@@ -193,5 +225,3 @@ footer .container {
     font-size: 12px;
     text-align: right;
 }
-
-
