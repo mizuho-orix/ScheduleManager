@@ -13,10 +13,6 @@ const monthSelect = document.getElementById("month");
 // 日付を格納する変数を作成
 const today = new Date();
 
-///////////////////////////////////////////////////////
-// 年のドロップダウンメニューを生成
-//////////////////////////////////////////////////////
-
 // yを2000から始めて2030までループ
 for (let y = 2000; y <= 2030; y++) {
 
@@ -43,7 +39,7 @@ for (let y = 2000; y <= 2030; y++) {
 
 ///////////////////////////////////////////////////////
 // 月のドロップダウンメニューを生成
-//////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
 
 // 0～11まで繰り返して月の選択肢を表示するドロップダウンメニューを作成
 for (let m = 0; m < 12; m++) {
@@ -179,20 +175,51 @@ function showTasksForDate(year, month, dateNum, ul) {
 
 		// 取得したli要素をループして新しいulに追加
 		items.forEach(li => {
+			// 予定表示用のli要素とspan要素を作成
 			const newLi = document.createElement("li");
 			const span = document.createElement("span");
 
+			// span要素にli要素の内容をコピーしてclass="task-box"を追加
 			span.textContent = li.textContent;
-			span.classList.add("task-box");	// class="task-box"を追加
+			span.classList.add("task-box");
 
+			// li要素に元のli要素のIDをコピー
+			newLi.id = li.id;
+
+			// task-box内のli要素をクリックした時のイベントを追加する処理
+			newLi.addEventListener("click", () => {
+				// テスト ///////////////
+				console.log("clicked:", newLi.id);
+				
+				// クリックされたli要素のIDから「task-」を削除し
+				// タスクIDを文字列として取得（例：task-5 → 5）
+				const taskId = parseInt(newLi.id.replace("task-", ""));
+
+				// JSONに格納されている配列scheduleListから
+				// クリックした予定のタスクIDとidが一致するオブジェクトを取得
+				//（※taskIdは文字列として取得されているので、JSONファイルの数値型と
+				//　合致させる為に数値型に変換する）
+				const task = scheduleList.find(s => s.id === taskId);
+				
+				// 合致したidがあればJSONファイルのnameとcommentをモーダルに追記
+				if (task) {
+					document.getElementById("modal-task-name").textContent = `予定名：${task.name}`;
+					document.getElementById("modal-task-comment").textContent = `備考　：${task.comment || "（なし）"}`;
+					// モーダルを画面に表示
+					const modal = document.getElementById("modal");
+					modal.style.display = "block";
+				}
+			});
+
+			// ulに作成したliとspanを追加
 			newLi.appendChild(span);
 			newUl.appendChild(newLi);
 		});
-		
+
 		taskBox.appendChild(newUl);
 
 		// const copyUl = ul.cloneNode(true);
-	    // taskBox.appendChild(copyUl);
+		// taskBox.appendChild(copyUl);
 	}
 }
 
@@ -226,6 +253,10 @@ function updateCalendar() {
 
         	// 取得したJSONデータ（data）の処理
             .then(data => {
+				
+				// テスト用///////////////////////
+				console.log(data);
+				
 				// サーバーから取得したJSONデータをscheduleListに格納
 				// (scheduleListの中にはデータベースのカラム名でプロパティが
 				//  格納されているので、JavaScript側の形式に変換する)
@@ -285,13 +316,37 @@ $(document).ready(function() {
 // ↑↑ 新規予定作成ボタンクリック時 ここまで ↑↑
 ////////////////////////////////////////////////////////////////////
 
+// 画面外クリックでモーダルを閉じる処理
+// 読み込まれた時に一度だけイベントを設定
+window.addEventListener("DOMContentLoaded", () => {
+	const modal = document.getElementById("modal");
+	const closeButton = document.querySelector(".close-button");
 
-// 年か月のドロップダウンメニューが変更された時にuddateCalendarを実行
-yearSelect.addEventListener("change", updateCalendar);
-monthSelect.addEventListener("change", updateCalendar);
+	// モーダルの閉じるボタンのクリック処理
+	closeButton.addEventListener("click", () => {
+		modal.style.display = "none";
+	});
+
+	window.addEventListener("click", (event) => {
+		if (event.target === modal) {
+			modal.style.display = "none";
+		}
+	});
+
+	// 初期カレンダー表示
+	const year = parseInt(yearSelect.value);
+	const month = parseInt(monthSelect.value);
+	renderCalendar(year, month);
+
+	// 年か月のドロップダウンメニューが変更された時にuddateCalendarを実行
+	yearSelect.addEventListener("change", updateCalendar);
+	monthSelect.addEventListener("change", updateCalendar);
+});
+
+
 
 // 初期表示（引数は今日の年、今日の月）
-renderCalendar(today.getFullYear(), today.getMonth());
+//renderCalendar(today.getFullYear(), today.getMonth());
 
 
 

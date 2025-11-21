@@ -76,6 +76,15 @@
 			<% } %>
 		</section>
 	</div>
+
+	<div id="modal" class="modal">
+	  <div class="modal-content">
+	    <span class="close-button">&times;</span>
+	    <h2>予定の詳細</h2>
+	    <p id="modal-task-name"></p>
+	    <p id="modal-task-comment"></p>
+	  </div>
+	</div>
 </body>
 <footer>
 </footer>
@@ -105,9 +114,10 @@
 				String name = s.getSchedule_Name().replace("\"", "\\\""); // ダブルクォートをエスケープ
 				String comment = s.getComment().replace("\"", "\\\"");
 		%>
-				// JSONファイルに変換
+				// JSONファイルに変換（ファイル名：scheduleList）
+				// idは数値型、その他は文字列
 				{
-				id: "<%= id %>",
+				id: <%= id %>,
 				date: "<%= date %>",
 				name: "<%= name %>",
 				comment: "<%= comment %>"
