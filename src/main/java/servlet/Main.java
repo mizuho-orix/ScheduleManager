@@ -26,14 +26,8 @@ import model.User;
 @WebServlet("/Main")
 public class Main extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    public Main() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-    
+           
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		//つぶやき一覧を取得してリストに保存
 		GetScheduleLogic getScheduleLogic = new GetScheduleLogic();
 

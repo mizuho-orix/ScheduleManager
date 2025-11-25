@@ -48,22 +48,15 @@ public class AddScheduleServlet extends HttpServlet {
 		// main.jspの新規予定作成フォームに入力された値を取得
 		request.setCharacterEncoding("UTF-8");
 		
-		// フォームから送られた日付を取得（文字列）
+		// フォームから送られた日付を取得（文字列）して日付に変換
 		String dateStr = request.getParameter("add-Date");
-		
-		// 文字列を日付に変換
 		LocalDate scheduleDate = LocalDate.parse(dateStr);
 		
-		// 予定内容を取得
-		String scheduleName = request.getParameter("add-ScheduleName");
-
-		// 備考を取得
-		String comment = request.getParameter("add-Comment");
+		String scheduleName = request.getParameter("add-ScheduleName");	// 予定名
+		String comment = request.getParameter("add-Comment");			// 備考
 		
-		// ログイン中のユーザーIDを取得（文字列で）
+		// ログイン中のユーザーIDを取得（文字列で）して数値に変換
 		String idStr = request.getParameter("add-UserId");
-		
-		// 文字列で格納されたユーザーIDをint型に変換
 		int id = Integer.parseInt(idStr);
 		
 		// 追加するスケジュールを格納するScheduleクラスを生成

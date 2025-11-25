@@ -42,25 +42,25 @@
 				  <li>予定の編集</li>
 				  <li>活動履歴</li>
 				</ul>
-			<div class="today-task">
+				<div class="today-task">
+				</div>
 			</div>
-	</div>
 
-	<div class="controls">
-		<label for="year">年:</label>
-		<select id="year"></select>
-		<label for="month">月:</label>
-		<select id="month"></select>
-	</div>
+			<div class="controls">
+				<label for="year">年:</label>
+				<select id="year"></select>
+				<label for="month">月:</label>
+				<select id="month"></select>
+			</div>
 
-	<table id="calendar">
-	  <thead>
-	    <tr>
-	      <th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th>
-	    </tr>
-	  </thead>
-	  <tbody></tbody>
-	</table>
+			<table id="calendar">
+			  <thead>
+			    <tr>
+			      <th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th>
+			    </tr>
+			  </thead>
+			  <tbody></tbody>
+			</table>
 
 			<a href="Main"><input type="submit" value="更新"></a>
 			<form action="Main" method="gett">
@@ -77,13 +77,41 @@
 		</section>
 	</div>
 
+	<!-- モーダル部分 -->
 	<div id="modal" class="modal">
-	  <div class="modal-content">
-	    <span class="close-button">&times;</span>
-	    <h2>予定の詳細</h2>
-	    <p id="modal-task-name"></p>
-	    <p id="modal-task-comment"></p>
-	  </div>
+		<div class="modal-content">
+			<span class="close-button">&times;</span>
+
+			<!-- 予定の詳細を表示するエリア -->
+			<div id="detail-view">
+				<h2>予定の詳細</h2>
+				<p id="modal-task-name"></p>
+				<p id="modal-task-comment"></p>
+				<button id="edit-task">予定を修正</button>
+	    	</div>
+
+		    <!-- 修正フォームエリア（初期は非表示） -->
+			<div id="edit-view" class="formBox" style="display:none;">
+				<h2>予定修正</h2>
+				
+				<!-- 修正フォーム -->
+				<form action="UpdateScheduleServlet" method="post">
+					<label for="edit-Date">日付を選択：</label>
+					<input type="date" id="edit-Date" name="edit-Date"><br>
+					<label for="edit-ScheduleName">予定内容　：</label>
+					<input type="text" id="edit-ScheduleName" name="edit-ScheduleName"><br>
+					<div class="comment-Area displayFlex">
+						<label for="edit-Comment">備考　　　：</label>
+						<textarea id="edit-Comment" name="edit-Comment"></textarea><br>
+					</div>		        
+					<input type="hidden" id="edit-TaskId" name="edit-TaskId" value="">		        	
+		        	<div class="edit-button">
+						<button type="submit">修正を保存</button>
+						<button type="button" id="cancel-edit">キャンセル</button>
+					</div>
+				</form>
+			</div>
+		</div>
 	</div>
 </body>
 <footer>

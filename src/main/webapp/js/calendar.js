@@ -4,13 +4,13 @@
 // カレンダーを表示
 ////////////////////////////////////////////////////////
 
-// htmlのID「year」要素を取得する
+// プルダウンの年を取得する
 const yearSelect = document.getElementById("year");
 
-// htmlのID「month」要素を取得する
+// プルダウンの月を取得する
 const monthSelect = document.getElementById("month");
 
-// 日付を格納する変数を作成
+// 現在の日付を格納する変数を作成
 const today = new Date();
 
 // yを2000から始めて2030までループ
@@ -203,11 +203,8 @@ function showTasksForDate(year, month, dateNum, ul) {
 				
 				// 合致したidがあればJSONファイルのnameとcommentをモーダルに追記
 				if (task) {
-					document.getElementById("modal-task-name").textContent = `予定名：${task.name}`;
-					document.getElementById("modal-task-comment").textContent = `備考　：${task.comment || "（なし）"}`;
-					// モーダルを画面に表示
-					const modal = document.getElementById("modal");
-					modal.style.display = "block";
+					// openModalに予定詳細情報を渡してモーダルを開く
+					openModal(taskId, task.date, task.name, task.comment)
 				}
 			});
 
@@ -225,7 +222,7 @@ function showTasksForDate(year, month, dateNum, ul) {
 
 
 ////////////////////////////////////////////////////////
-// カレンダーの年月を変更した時の処理
+// ↓カレンダーの年月を変更した時の処理↓
 ////////////////////////////////////////////////////////
 
 function updateCalendar() {
@@ -251,25 +248,25 @@ function updateCalendar() {
 			return response.json();
 		})
 
-        	// 取得したJSONデータ（data）の処理
-            .then(data => {
-				
-				// テスト用///////////////////////
-				console.log(data);
-				
-				// サーバーから取得したJSONデータをscheduleListに格納
-				// (scheduleListの中にはデータベースのカラム名でプロパティが
-				//  格納されているので、JavaScript側の形式に変換する)
-				scheduleList = data.map(s => ({
-					id: s.id,
-					date: s.schedule_Date,
-					name: s.schedule_Name,
-					comment: s.comment
-				}));
+    	// 取得したJSONデータ（data）の処理
+        .then(data => {
+			
+			// テスト用///////////////////////
+			console.log(data);
+			
+			// サーバーから取得したJSONデータをscheduleListに格納
+			// (scheduleListの中にはデータベースのカラム名でプロパティが
+			//  格納されているので、JavaScript側の形式に変換する)
+			scheduleList = data.map(s => ({
+				id: s.id,
+				date: s.schedule_Date,
+				name: s.schedule_Name,
+				comment: s.comment
+			}));
 
-				// 引数に選択された年月を渡してカレンダー作成を実行
-				renderCalendar(year, month);
-            })
+			// 引数に選択された年月を渡してカレンダー作成を実行
+			renderCalendar(year, month);
+        })
 	// エラー時の処理
 	.catch(error => {
 		console.error("スケジュールの取得に失敗しました:", error);
@@ -277,7 +274,37 @@ function updateCalendar() {
 }
 
 ////////////////////////////////////////////////////////////////////
-// 新規予定作成ボタンをクリック時
+// カレンダーの日付をクリックした時に、
+// 引数にJSONファイルの予定詳細情報を受け取り、モーダルを開く
+////////////////////////////////////////////////////////////////////
+let currentTaskId;
+let currentTaskDate;
+let currentTaskName;
+let currentTaskComment;
+
+function openModal(taskId, taskDate, taskName, taskComment) {
+	document.getElementById("modal-task-name").textContent = `予定名：${taskName}`;
+	document.getElementById("modal-task-comment").textContent = `備考　：${taskComment || "（なし）"}`;
+
+	const editTaskId = document.getElementById("edit-TaskId")
+	
+	// サーブレットに送るタスクIDをhiddenに格納
+	if (editTaskId) {
+		editTaskId.value = taskId;
+	}
+	
+	// 編集モーダルに送る用のタスクID
+	currentTaskId = taskId;
+	currentTaskDate = taskDate;
+	currentTaskName = taskName;
+	currentTaskComment = taskComment;
+	
+	const modal = document.getElementById("modal");
+	modal.style.display = "block";	
+}
+
+////////////////////////////////////////////////////////////////////
+// ↓新規予定作成ボタンをクリック時↓
 ////////////////////////////////////////////////////////////////////
 
 $(document).ready(function() {
@@ -291,7 +318,7 @@ $(document).ready(function() {
 			taskBox.innerHTML = "";    
 	
 			const addBoxHtml = `
-			<div class="addBox">
+			<div class="addBox formBox">
 				<p>新規予定入力</p>
 	
 				<form action="AddScheduleServlet" method="post">
@@ -299,7 +326,7 @@ $(document).ready(function() {
 					<input type="date" name="add-Date"><br>
 					<label for="add-ScheduleName">予定内容　：</label>
 					<input type="text" name="add-ScheduleName" placeholder="予定を入力"><br>
-					<div class="comment-Area">
+					<div class="comment-Area displayFlex">
 						<div class="comment">備考　　　：</div>
 						<div class="comment-Box"><textarea name="add-Comment"></textarea></div>
 					</div>
@@ -311,25 +338,63 @@ $(document).ready(function() {
 			$('.today-task').append(addBoxHtml);
 		}
 	});
-});
 
-// ↑↑ 新規予定作成ボタンクリック時 ここまで ↑↑
-////////////////////////////////////////////////////////////////////
+	// 修正ボタンをクリックしたらフォーム表示
+	$('#edit-task').on('click', function() {
+		// 表示中の予定詳細を修正フォームにコピー
+		$('#edit-Date').val(currentTaskDate);			// 予定日
+		$('#edit-ScheduleName').val(currentTaskName);	// 予定名
+		$('#edit-Comment').val(currentTaskComment);		// 備考
+		$('#edit-TaskId').val(currentTaskId);			// hiddenのvalueにスケジュールIDを代入
+	
+		// 予定詳細を隠して予定編集を開く
+		$('#detail-view').hide();
+		$('#edit-view').show();
+		$('.modal-content').css('width', '500px') // 編集時だけ幅を広げる
+	});
+	
+	// キャンセルで予定詳細に戻る
+	$('#cancel-edit').on('click', function() {
+		$('#edit-view').hide();
+		$('#detail-view').show();
+		$('.modal-content').css('width', '300px') // 予定詳細の幅に戻す
+	});
+	
+});
 
 // 画面外クリックでモーダルを閉じる処理
 // 読み込まれた時に一度だけイベントを設定
 window.addEventListener("DOMContentLoaded", () => {
 	const modal = document.getElementById("modal");
 	const closeButton = document.querySelector(".close-button");
+	
+	// モーダルを閉じる時に予定詳細画面に戻す処理
+	function closeModal() {
+		// モーダルを非表示
+		modal.style.display = "none";
+
+		// 予定編集画面を閉じて詳細ビューに戻す
+		document.getElementById("edit-view").style.display = "none";
+		document.getElementById("detail-view").style.display = "block";
+
+		// 幅を詳細ビュー用に戻す
+		document.querySelector(".modal-content").style.width = "300px";
+	}
 
 	// モーダルの閉じるボタンのクリック処理
-	closeButton.addEventListener("click", () => {
-		modal.style.display = "none";
-	});
+	closeButton.addEventListener("click", closeModal);
 
+	// モーダルの外側をクリックした時にモーダルを閉じる処理
 	window.addEventListener("click", (event) => {
 		if (event.target === modal) {
-			modal.style.display = "none";
+			closeModal();
+		}
+	});
+
+	// Escキーで閉じる処理
+	window.addEventListener("keydown", (event) => {
+		if (event.key === "Escape") {
+			closeModal();
 		}
 	});
 
@@ -428,5 +493,3 @@ window.addEventListener("DOMContentLoaded", () => {
 //         });
 //     });
 // });
-
-

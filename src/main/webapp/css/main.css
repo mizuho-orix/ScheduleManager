@@ -95,10 +95,6 @@ section {
   list-style: none;
 }
 
-h2 {
-  margin-top: 0.5rem;
-}
-
 /* 予定表示ボックス内の予定名を囲むli要素 */
 .task-box {
 	display: inline-block;
@@ -122,48 +118,49 @@ h2 {
 }
 
 
-/* 新規予定入力時に表示されるボックス */
-.addBox {
+/* 新規予定入力時や予定修正時に表示されるボックス */
+.formBox {
 	height: 85%;
-  	margin-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
-/* 新規予定入力時のタイトル */
-.addBox p {
-  font-size: 1.2rem;
-  font-weight: bold;
-  height: 1.5rem;
+/* 新規予定入力と予定修正時のタイトル */
+.formBox p, #edit-view h2 {
+	font-size: 1.2rem;
+	font-weight: bold;
+	height: 1.5rem;
 }
 
-/* 新規予定入力時の日付選択ボックス */
+/* 新規予定入力と予定修正時の日付選択ボックス */
 form input[type="date"] {
-  width: 100px;
-  height: 1.5rem;
-  margin-bottom: 0.5rem;
+	width: 100px;
+	height: 1.5rem;
+	margin-bottom: 0.5rem;
 }
 
-/* 新規予定入力時の予定内容ボックス */
+/* 新規予定入力と予定修正時の予定内容ボックス */
 form input[type="text"] {
-  width: 300px;
-  height: 1.5rem;
-  margin-bottom: 0.5rem;
+	width: 300px;
+	height: 1.5rem;
+	margin-bottom: 0.5rem;
 }
 
-/* 新規予定入力時の備考エリア */
-.comment-Area {
-  display: flex;
+/* 横並びにしたい所に設置 */
+.displayFlex {
+	display: flex;
 }
 
-/* 新規予定入力時の備考入力ボックス */
-form textarea[name="add-Comment"] {
-  width: 300px;
-  height: 100px;
-  margin: 0.3rem 0 0.5rem 0.3rem;
+/* 新規予定入力と予定修正時の備考入力ボックス */
+form textarea[name="add-Comment"],
+form textarea[name="edit-Comment"] {
+	width: 300px;
+	height: 100px;
+	margin: 0.3rem 0 0.5rem 0.3rem;
 }
 
-/* 新規予定入力時の予定追加ボタン */
+/* 新規予定入力と予定修正時の予定追加ボタン */
 .addBox button {
-  margin-left: 325px;
+	margin-left: 325px;
 }
 
 /* カレンダーの日付選択ドロップボックス */
@@ -231,13 +228,27 @@ tbody :hover {
   padding: 20px;
   border-radius: 8px;
   width: 300px;
+  max-width: 500px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.edit-content {
+	width: 500px;
+}
+
+.edit-button {
+	margin-left: 238px;
 }
 
 .close-button {
   float: right;
   font-size: 24px;
   cursor: pointer;
+}
+
+#edit-task {
+	margin-top: 1.5rem;
+	margin-left: 200px;
 }
 
 footer {
