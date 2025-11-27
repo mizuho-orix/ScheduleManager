@@ -4,10 +4,10 @@ header {
 }
 
 body {
-  font-family: sans-serif;
-  background-color: #f2f2f2;
-  max-width: 1200px;
-  margin: auto;
+	font-family: sans-serif;
+	background-color: #f2f2f2;
+	max-width: 1200px;
+	margin: auto;
 }
 
 section {
@@ -15,50 +15,49 @@ section {
 }
 
 .contents {
-  background-color: #d4f7fc;
-  width: 1200px;
+	background-color: #d4f7fc;
+	width: 1200px;
 }
 
 .page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: auto;
-  padding: 0 1.5rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: auto;
+	padding: 0 1.5rem;
 }
 
 .logo {
-  width: 100px;
+	width: 100px;
 }
 
 .menu {
-  display: flex;
+	display: flex;
 }
 
 .command {
-  width: 400px;
-  min-width: 400px;
-  display: flex;
-  flex-direction: column;
-  list-style: none;
-  align-content: space-around;
-  border-right: solid #000;
+	width: 350px;
+	display: flex;
+	margin-left:35px;
+	flex-direction: column;
+	list-style: none;
+	align-content: space-around;
 }
 
 .command li {
-  font-size: 1.5rem;
-  height: 3rem;
-  line-height: 3rem;
-  text-align: center;
-  background-color: #ffffff;
-  border: 2px solid #007bff;
-  border-radius: 0.5rem;
-  margin: 1.5rem;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  vertical-align: middle;
-  border-style: solid;
+	font-size: 1.5rem;
+	height: 3rem;
+	line-height: 3rem;
+	text-align: center;
+	background-color: #ffffff;
+	border: 2px solid #007bff;
+	border-radius: 0.5rem;
+	margin: 1.5rem;
+	cursor: pointer;
+	transition: background-color 0.3s, color 0.3s;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	vertical-align: middle;
+	border-style: solid;
 }
 
 .command li:hover {
@@ -69,8 +68,7 @@ section {
 .today-task {
   background-color: #fff;
   height: 300px;
-  width: 700px;
-  min-width: 600px;
+  width: 590px;
   margin: 0 2rem 1rem 2rem;
   padding: 0 1.5rem 0.5rem;
   border-style: solid;
@@ -165,7 +163,18 @@ form textarea[name="edit-Comment"] {
 
 /* カレンダーの日付選択ドロップボックス */
 .controls {
-  text-align: center;
+	width: 1000px;
+	display: flex;
+	justify-content: space-between;	/* 左・中央・右に配置 */
+	align-items: center; /* 垂直方向を中央揃え */
+	margin: 10px auto;
+}
+
+.controls-left,
+.controls-center,
+.controls-right, {
+	flex: 1;
+	text-align: center;
 }
 
 table {
@@ -237,7 +246,12 @@ tbody :hover {
 }
 
 .edit-button {
-	margin-left: 238px;
+	margin-left: 100px;
+	margin-right 92px; 
+}
+
+#delete-Schedule {
+	margin-right: 52px;
 }
 
 .close-button {

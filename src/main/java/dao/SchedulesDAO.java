@@ -18,7 +18,8 @@ import model.Schedule;
 
 public class SchedulesDAO {
 	//データベース接続に使用する情報
-	private final String JDBC_URL = "jdbc:h2:~/desktop/h2DB/H2/scheduleManager";
+	private final String JDBC_URL = "jdbc:h2:~/desktop/h2DB/H2/scheduleManager;IGNORE_UNKNOWN_SETTINGS=TRUE;NON_KEYWORDS=BACKSLASH;INIT=SET NAMES UTF8";
+	
 	private final String DB_USER = "sa";
 	private final String DB_PASS = "";
 	
@@ -162,6 +163,37 @@ public class SchedulesDAO {
 		}
 
 		//追加が成功していればtrueを返す
+		return true;
+	}
+	
+	// 予定を削除するメソッド
+	public boolean delete(int taskId) {
+		try {
+			Class.forName("org.h2.Driver");
+		} catch (ClassNotFoundException e) {
+			throw new IllegalStateException("JDBCドライバを読み込めませんでした");
+		}
+		
+		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+			// DELETE文の準備
+			String sql = "DELETE FROM SCHEDULES WHERE id = ?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			
+			pStmt.setInt(1, taskId); // 削除対象のスケジュールID
+			
+			// INSERT文を実行（resultには追加された行数が代入される）
+			int result = pStmt.executeUpdate();
+			
+			// 追加された行数が1行でなければ追加に失敗している
+			if (result != 1) {
+				return false;
+			}			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		// 削除が成功していればtrueを返す
 		return true;
 	}
 }

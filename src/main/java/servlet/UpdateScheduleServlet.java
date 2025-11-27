@@ -3,7 +3,6 @@ package servlet;
 import java.io.IOException;
 import java.time.LocalDate;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -44,8 +43,8 @@ public class UpdateScheduleServlet extends HttpServlet {
 		// データベース接続→修正するexecuteメソッドを呼び出す
 		bo.excecute(updateSchedule);
 
-		//メインメニューにフォワード
-		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/main.jsp");
-		dispatcher.forward(request, response);
+		// フォワードだと F5 で再送信されるので、リダイレクト推奨
+		response.setContentType("text/html; charset=UTF-8");
+		response.sendRedirect(request.getContextPath() + "/MainServlet"); 
 	}
 }

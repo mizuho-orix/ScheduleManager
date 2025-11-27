@@ -69,8 +69,8 @@ public class AddScheduleServlet extends HttpServlet {
 		// データベース接続→登録するexecuteメソッドを呼び出す
 		bo.execute(addSchedule);
 
-		//メインメニューにフォワード
-		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/main.jsp");
-		dispatcher.forward(request, response);
+		// フォワードだと F5 で再送信されるので、リダイレクト推奨
+		response.setContentType("text/html; charset=UTF-8");
+		response.sendRedirect(request.getContextPath() + "/MainServlet"); 
 	}
 }

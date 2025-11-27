@@ -4,7 +4,7 @@
 // カレンダーを表示
 ////////////////////////////////////////////////////////
 
-// プルダウンの年を取得する
+// プルダウンのyear要素を取得する
 const yearSelect = document.getElementById("year");
 
 // プルダウンの月を取得する
@@ -313,15 +313,15 @@ $(document).ready(function() {
 		if ($('.addBox').length === 0) {
 	        // class="today-task"の要素を取得
 			const taskBox = document.querySelector(".today-task");
-	
+
 			// today-taskボックスの中身をクリア
 			taskBox.innerHTML = "";    
-	
+
 			const addBoxHtml = `
 			<div class="addBox formBox">
 				<p>新規予定入力</p>
-	
-				<form action="AddScheduleServlet" method="post">
+
+				<form action="AddScheduleServlet" method="post" accept-charset="UTF-8">
 					<label for="add-Date">日付を選択：</label>
 					<input type="date" name="add-Date"><br>
 					<label for="add-ScheduleName">予定内容　：</label>
@@ -339,6 +339,13 @@ $(document).ready(function() {
 		}
 	});
 
+	// 予定追加ボタンをクリックした時の確認処理
+	$(document).on('submit', '.addBox form', function(e) {
+		if (!confirm("この内容で予定を追加しますか？")) {
+			e.preventDefault(); // キャンセル時に送信を止める
+		}
+	});
+
 	// 修正ボタンをクリックしたらフォーム表示
 	$('#edit-task').on('click', function() {
 		// 表示中の予定詳細を修正フォームにコピー
@@ -352,14 +359,42 @@ $(document).ready(function() {
 		$('#edit-view').show();
 		$('.modal-content').css('width', '500px') // 編集時だけ幅を広げる
 	});
-	
+
 	// キャンセルで予定詳細に戻る
 	$('#cancel-edit').on('click', function() {
 		$('#edit-view').hide();
 		$('#detail-view').show();
 		$('.modal-content').css('width', '300px') // 予定詳細の幅に戻す
 	});
-	
+
+	// 修正を保存ボタンをクリックした時の確認処理
+	$("#edit-view form").on("submit", function(e) {
+		if (!confirm("この内容で予定を修正しますか？")) {
+			e.preventDefault(); // キャンセル時に送信を止める
+		}
+	});
+
+	// 予定削除ボタンをクリックした時の削除処理
+	$("#delete-Schedule").on("click", function() {
+		// hiddenフィールドからタスクIDを取得
+		const taskId = $("#edit-TaskId").val();
+
+		if (confirm("この予定を削除しますか？")) {
+			// AjaxでDeleteScheduleServletにタスクIDを送信して削除
+			$.ajax( {
+				url: "DeleteScheduleServlet", // 送信先サーブレット
+				type: "POST",
+				data: { taskId: taskId }, // taskId(キー): taskId(変数)
+				success: function() {
+					alert("予定を削除しました。");
+					location.reload(); // ページをリロードしてカレンダーを更新
+				},
+				error: function() {
+					alert("予定の削除に失敗しました。");
+				}
+			});
+		}
+	});	
 });
 
 // 画面外クリックでモーダルを閉じる処理
@@ -399,21 +434,51 @@ window.addEventListener("DOMContentLoaded", () => {
 	});
 
 	// 初期カレンダー表示
-	const year = parseInt(yearSelect.value);
-	const month = parseInt(monthSelect.value);
+	let year = parseInt(yearSelect.value);
+	let month = parseInt(monthSelect.value);
 	renderCalendar(year, month);
 
 	// 年か月のドロップダウンメニューが変更された時にuddateCalendarを実行
 	yearSelect.addEventListener("change", updateCalendar);
 	monthSelect.addEventListener("change", updateCalendar);
+	
+	// 先月ボタン
+	document.getElementById("prev-month").addEventListener("click", () => {
+		// 現在のカレンダーの月を1減らす
+		month--;
+
+		// 月が0未満になったら前年の12月にする
+		if (month < 0) {
+			month = 11;
+			year--;
+		}
+
+		// プルダウンメニューの値を更新してカレンダーを再表示
+		yearSelect.value = year;
+		monthSelect.value = month;
+		updateCalendar();
+	});	
+
+	// 次月ボタン
+	document.getElementById("next-month").addEventListener("click", () => {
+		// 現在のカレンダーの月を1増やす
+		month++;
+
+		// 月が11を超えたら翌年の1月にする
+		if (month > 11) {
+			month = 0;
+			year++;
+		}
+
+		// プルダウンメニューの値を更新してカレンダーを再表示
+		yearSelect.value = year;
+		monthSelect.value = month;
+		updateCalendar();
+	});
 });
 
-
-
 // 初期表示（引数は今日の年、今日の月）
-//renderCalendar(today.getFullYear(), today.getMonth());
-
-
+// renderCalendar(today.getFullYear(), today.getMonth());
 
 
 // ↓jQueryで実装したのでボツになった
