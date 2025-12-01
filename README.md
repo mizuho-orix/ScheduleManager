@@ -2,21 +2,21 @@
 
 ## 📘 概要
 Java / JSP / Servlet / SQL を用いて開発した Web アプリケーションです。  
-ユーザー管理・データ登録・検索などの CRUD 処理を実装し、MVC 設計と DB 連携を学習目的で作成しました。
+ログイン機能、スケジュール登録、編集、削除機能を実装し、MVC 設計と DB 連携を学習目的で作成しました。
 
 ---
 
 ## 🛠 開発環境
 | 項目 | 内容 |
 |------|------|
-| 言語 | Java（JDK 17 など） |
+| 言語 | Java（JDK 24） |
 | フレームワーク | Servlet / JSP（Jakarta EE） |
-| データベース | MySQL 8.0 |
-| ビルドツール | Apache Maven または Eclipse Dynamic Web Project |
-| アプリケーションサーバー | Apache Tomcat 10.x |
-| IDE | Eclipse / IntelliJ IDEA / VS Code |
-| バージョン管理 | Git / GitHub |
-| OS | macOS / Windows |
+| データベース | h2DB 2.4.240 |
+| ビルドツール | Eclipse Dynamic Web Project |
+| アプリケーションサーバー | Apache Tomcat 10.1.42 |
+| IDE | Eclipse / VS Code |
+| バージョン管理 | GitHub |
+| OS | Windows |
 
 ---
 
